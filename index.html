@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsip World</title>
+    <title>Galeri Foto & Video Firebase</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
@@ -11,15 +11,18 @@
 </head>
 <body>
     <div class="blur-box">
-        <h1>Upload file</h1>
+        <h1>Arsip Files</h1>
 
         <!-- Tombol untuk upload gambar -->
         <input type="file" id="imageInput" multiple accept="image/*"/>
-        <button onclick="uploadImages()">Upload All images</button>
+        <button onclick="uploadImages()">Upload Semua Gambar</button>
 
         <!-- Tombol untuk upload video -->
         <input type="file" id="videoInput" multiple accept="video/*"/>
-        <button onclick="uploadVideos()">Upload All videos</button>
+        <button onclick="uploadVideos()">Upload Semua Video</button>
+
+        <!-- Elemen notifikasi untuk menampilkan pesan -->
+        <div id="notification" class="hidden"></div>
 
         <div id="gallery">
             <!-- Galeri gambar dan video akan ditampilkan di sini -->
@@ -28,36 +31,50 @@
 
     <script>
         // Konfigurasi Firebase
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDCGfMEq_IbCx20XQ2p-nDtKJo2LmbMO-k",
-  authDomain: "mas-pe.firebaseapp.com",
-  projectId: "mas-pe",
-  storageBucket: "mas-pe.appspot.com",
-  messagingSenderId: "675304611557",
-  appId: "1:675304611557:web:06c7870ba7d90d85757e0c",
-  measurementId: "G-M979HVGH9D"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCGfMEq_IbCx20XQ2p-nDtKJo2LmbMO-k",
+            authDomain: "mas-pe.firebaseapp.com",
+            projectId: "mas-pe",
+            storageBucket: "mas-pe.appspot.com",
+            messagingSenderId: "675304611557",
+            appId: "AIzaSyDCGfMEq_IbCx20XQ2p-nDtKJo2LmbMO-k",
+            measurementId: "G-M979HVGH9D",
+        };
 
         // Inisialisasi Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const storage = firebase.storage();
         const db = firebase.firestore();
 
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, isSuccess) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = isSuccess ? 'success' : 'error';
+            notification.classList.remove('hidden');
+
+            // Sembunyikan notifikasi setelah 3 detik
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
         // Fungsi untuk meng-upload gambar
         function uploadImages() {
             const imageInput = document.getElementById('imageInput');
             const files = imageInput.files;
-            
+
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const storageRef = storage.ref('uploads/images/' + file.name);
 
                 storageRef.put(file).then((snapshot) => {
                     console.log('Uploaded image: ' + file.name);
+                    showNotification('Gambar berhasil di-upload!', true);
                     getGalleryFiles();
                 }).catch((error) => {
                     console.error('Error uploading image: ', error);
+                    showNotification('Gagal meng-upload gambar.', false);
                 });
             }
         }
@@ -66,16 +83,18 @@ const firebaseConfig = {
         function uploadVideos() {
             const videoInput = document.getElementById('videoInput');
             const files = videoInput.files;
-            
+
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const storageRef = storage.ref('uploads/videos/' + file.name);
 
                 storageRef.put(file).then((snapshot) => {
                     console.log('Uploaded video: ' + file.name);
+                    showNotification('Video berhasil di-upload!', true);
                     getGalleryFiles();
                 }).catch((error) => {
                     console.error('Error uploading video: ', error);
+                    showNotification('Gagal meng-upload video.', false);
                 });
             }
         }
