@@ -15,14 +15,14 @@ body, html {
 .blur-box {
     background: rgba(255, 255, 255, 0.2); /* Sedikit lebih terang */
     border-radius: 20px;
-    padding: 20px;
+    padding: 30px;
     width: 300px;
-    max-width: 90%;
-    backdrop-filter: blur(5px); /* Efek blur lebih intens */
+    max-width: 90%; /* Lebar yang lebih kecil dan responsif */
+    backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     display: flex;
-    flex-direction: column; /* Atur elemen dalam blur-box secara vertikal */
-    align-items: center; /* Atur elemen dalam blur-box agar rata di tengah secara horizontal */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     color: #fff;
 }
@@ -33,16 +33,11 @@ h1 {
     color: #fff;
 }
 
-/* Input dan tombol diatur menjadi blok vertikal dengan jarak yang pas */
 input[type="file"], button {
     display: block;
-    margin: 10px 0; /* Margin atas-bawah */
-    width: 100%; /* Memastikan lebar penuh di dalam blur-box */
-    max-width: 300px; /* Batasan lebar maksimum agar rapi */
-}
-
-input[type="file"] {
-    color: #fff;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 300px;
 }
 
 button {
@@ -52,12 +47,36 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%; /* Memastikan tombol penuh lebarnya */
-    max-width: 200px; /* Batasan lebar tombol */
+    width: 100%;
+    max-width: 300px;
 }
 
 button:hover {
     background-color: #45a049;
+}
+
+/* Notifikasi sukses dan gagal */
+#notification {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#notification.hidden {
+    display: none;
+}
+
+#notification.success {
+    background-color: #4CAF50; /* Warna sukses (hijau) */
+    color: white;
+}
+
+#notification.error {
+    background-color: #f44336; /* Warna gagal (merah) */
+    color: white;
 }
 
 /* Tampilan galeri gambar dan video */
