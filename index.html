@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsip World</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="blur-box">
+        <h1>Upload file</h1>
+
+        <!-- Tombol untuk upload gambar -->
+        <input type="file" id="imageInput" multiple accept="image/*"/>
+        <button onclick="uploadImages()">Upload All images</button>
+
+        <!-- Tombol untuk upload video -->
+        <input type="file" id="videoInput" multiple accept="video/*"/>
+        <button onclick="uploadVideos()">Upload All videos</button>
+
+        <div id="gallery">
+            <!-- Galeri gambar dan video akan ditampilkan di sini -->
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Firebase
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDCGfMEq_IbCx20XQ2p-nDtKJo2LmbMO-k",
+  authDomain: "mas-pe.firebaseapp.com",
+  projectId: "mas-pe",
+  storageBucket: "mas-pe.appspot.com",
+  messagingSenderId: "675304611557",
+  appId: "1:675304611557:web:06c7870ba7d90d85757e0c",
+  measurementId: "G-M979HVGH9D"
+};
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const db = firebase.firestore();
+
+        // Fungsi untuk meng-upload gambar
+        function uploadImages() {
+            const imageInput = document.getElementById('imageInput');
+            const files = imageInput.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const storageRef = storage.ref('uploads/images/' + file.name);
+
+                storageRef.put(file).then((snapshot) => {
+                    console.log('Uploaded image: ' + file.name);
+                    getGalleryFiles();
+                }).catch((error) => {
+                    console.error('Error uploading image: ', error);
+                });
+            }
+        }
+
+        // Fungsi untuk meng-upload video
+        function uploadVideos() {
+            const videoInput = document.getElementById('videoInput');
+            const files = videoInput.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const storageRef = storage.ref('uploads/videos/' + file.name);
+
+                storageRef.put(file).then((snapshot) => {
+                    console.log('Uploaded video: ' + file.name);
+                    getGalleryFiles();
+                }).catch((error) => {
+                    console.error('Error uploading video: ', error);
+                });
+            }
+        }
+
+        // Fungsi untuk mengambil dan menampilkan file dari Firebase Storage
+        function getGalleryFiles() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = ''; // Kosongkan galeri lama
+            const storageRef = storage.ref('uploads');
+
+            storageRef.listAll().then((result) => {
+                result.items.forEach((fileRef) => {
+                    fileRef.getDownloadURL().then((url) => {
+                        const ext = fileRef.name.split('.').pop().toLowerCase();
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.style.width = '200px';
+                            gallery.appendChild(img);
+                        } else if (['mp4', 'webm', 'ogg'].includes(ext)) {
+                            const video = document.createElement('video');
+                            video.src = url;
+                            video.controls = true;
+                            video.style.width = '200px';
+                            gallery.appendChild(video);
+                        }
+                    });
+                });
+            }).catch((error) => {
+                console.log('Error fetching files: ', error);
+            });
+        }
+
+        // Memuat galeri file saat halaman di-load
+        window.onload = function() {
+            getGalleryFiles();
+        };
+    </script>
+</body>
+</html>

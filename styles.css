@@ -1,0 +1,72 @@
+/* Mengatur tampilan halaman agar elemen berada di tengah secara vertikal dan horizontal */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Horizontal center */
+    align-items: center; /* Vertical center */
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+}
+
+/* Box buram di tengah halaman */
+.blur-box {
+    background: rgba(255, 255, 255, 0.2); /* Sedikit lebih terang */
+    border-radius: 20px;
+    padding: 20px;
+    width: 300px;
+    max-width: 90%;
+    backdrop-filter: blur(5px); /* Efek blur lebih intens */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column; /* Atur elemen dalam blur-box secara vertikal */
+    align-items: center; /* Atur elemen dalam blur-box agar rata di tengah secara horizontal */
+    text-align: center;
+    color: #fff;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Input dan tombol diatur menjadi blok vertikal dengan jarak yang pas */
+input[type="file"], button {
+    display: block;
+    margin: 10px 0; /* Margin atas-bawah */
+    width: 100%; /* Memastikan lebar penuh di dalam blur-box */
+    max-width: 300px; /* Batasan lebar maksimum agar rapi */
+}
+
+input[type="file"] {
+    color: #fff;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Memastikan tombol penuh lebarnya */
+    max-width: 200px; /* Batasan lebar tombol */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Tampilan galeri gambar dan video */
+#gallery {
+    margin-top: 20px;
+}
+
+#gallery img, #gallery video {
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
